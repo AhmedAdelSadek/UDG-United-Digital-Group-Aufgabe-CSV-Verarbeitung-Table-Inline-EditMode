@@ -1,0 +1,43 @@
+.mat-header-cell {
+  color: #efefef;
+  background-color: black;
+}
+
+// td {
+//   color: #efefef;
+//   background-color: #000000cc;
+// }
+
+.main {
+  overflow: hidden;
+}
+
+.element-row td {
+  border-bottom-width: 0;
+}
+
+mat-paginator {
+  background-color: #17a2b8;
+}
+
+.mat-row:hover .mat-cell {
+  border-color: #efefef;
+  background-color: #bcc2c3;
+  // background-color: #0099CC;
+}
+
+.tableContainer {
+  overflow: auto;
+  // height: 621px;
+}
+
+@media only screen and (max-width: 490px) {
+  .tableContainer {
+    height: 558px;
+  }
+}
+
+.tableHeaderCellDiv {
+  resize: horizontal;
+  overflow: hidden;
+}

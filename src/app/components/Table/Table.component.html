@@ -1,0 +1,57 @@
+<div class="main">
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <input fxFlex="50" fxFlex.xs="45" type="file" name="files" class="form-control" #uploads
+      (change)="uploadCSV(uploads.files)" multiple value="process" accept=".csv" />
+    <div fxFlex="50" fxFlex.xs="50" *ngIf="dataList.length" fxLayout="row" fxLayoutAlign="space-around center">
+      <div>
+        <mat-form-field appearance="standard">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Filter" #input>
+        </mat-form-field>
+      </div>
+      <div>
+        <button mat-raised-button color="primary" (click)="toggleEdit()">{{isEditMode?'Done':'Edit'}}</button>
+      </div>
+      <div>
+        <button mat-button mat-flat-button color="primary" (click)="openDialog('Add',object)"
+          [ngStyle]="{'background-color':'#17a2b8' }">Add Row</button>
+      </div>
+      <div>
+        <button mat-button mat-flat-button color="primary" (click)="exportExcel()"
+          [ngStyle]="{'background-color':'#17a2b8' }">Export</button>
+      </div>
+      <div>
+        <button mat-button mat-flat-button color="primary" (click)="navChart()"
+          [ngStyle]="{'background-color':'#17a2b8' }">Chart</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="dataList.length" class="tableContainer">
+    <form [formGroup]="tableFromGroup">
+      <table mat-table [dataSource]="dataSource" matSort matSortDirection="desc">
+        <ng-container matColumnDef="{{ col.name }}"
+          *ngFor="let col of displayedColumns; let colIndex = index; trackBy: trackByFn">
+          <th mat-header-cell *matHeaderCellDef class="tableHeaderCellDiv" mat-sort-header>{{ col.title }}</th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <ng-container *ngIf="isEditMode; else elseEditModeTemplate">
+              <!-- Edit mode -->
+              <mat-form-field>
+                <input matInput [formControlName]="controlIndex[element[fcm]+colIndex]"
+                  (change)="onValueChange(col.name,colIndex,i)">
+              </mat-form-field>
+            </ng-container>
+            <ng-template #elseEditModeTemplate>
+              <!--view mode  -->
+              {{element[col.name]}}
+            </ng-template>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="tableColumns; sticky: true;" class="tableHeaderCellDiv"></tr>
+        <tr mat-row *matRowDef="let row; columns: tableColumns"></tr>
+      </table>
+    </form>
+  </div>
+  <mat-paginator [hidden]="isHidden" [pageSize]="5" (page)="handlePageEvent($event)"
+    [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons>
+  </mat-paginator>
+</div>
